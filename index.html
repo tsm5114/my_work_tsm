@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陶诗曼 | 武汉大学 2028届 | 产品/运营/商业分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2C3E50',
+                        'secondary': '#7F8C8D',
+                        'accent': '#E67E22',
+                        'warm-white': '#FAFAFA',
+                        'soft-gray': '#F0F2F5',
+                        'charcoal': '#34495E',
+                        'teal': '#1ABC9C',
+                        'muted-orange': '#D35400',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.08)',
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.08)',
+                    },
+                    backgroundImage: {
+                        'gradient-hero': 'linear-gradient(135deg, #FAFAFA 0%, #F0F2F5 100%)',
+                        'gradient-card': 'linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @layer utilities {
+            .text-shadow-sm {
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+            color: #2C3E50;
+            line-height: 1.7;
+            word-spacing: 0.03em;
+            letter-spacing: 0.01em;
+        }
+        
+        .animate-counter {
+            display: inline-block;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .project-images-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .image-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .image-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        
+        .delete-image-btn {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .image-item:hover .delete-image-btn {
+            opacity: 1;
+        }
+        
+        .upload-progress {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .image-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .image-preview-modal.show {
+            display: flex;
+        }
+        
+        .image-preview-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            position: relative;
+        }
+        
+        .image-preview-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-preview-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+        
+        .close-preview-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="font-inter">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <!-- 左侧 -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-xl font-bold text-primary">陶诗曼</span>
+                    <span class="hidden md:block text-sm text-secondary">武汉大学 2028届</span>
+                </div>
+                
+                <!-- 右侧导航 -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#about" class="text-primary hover:text-primary transition-colors">关于我</a>
+                    <a href="#projects" class="text-primary hover:text-primary transition-colors">核心项目</a>
+                    <a href="#experience" class="text-primary hover:text-primary transition-colors">实习经历</a>
+                    <a href="#skills" class="text-primary hover:text-primary transition-colors">校园经历</a>
+                    <a href="#contact" class="text-primary hover:text-primary transition-colors">联系我</a>
+                    <button id="download-resume" class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors font-medium flex items-center gap-2">
+                        <i class="fas fa-download"></i>
+                        下载我的简历
+                    </button>
+                </div>
+                
+                <!-- 汉堡菜单 -->
+                <button id="hamburger" class="md:hidden p-2">
+                    <i class="fas fa-bars text-primary"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-white shadow-lg hidden">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#about" class="block py-2 text-primary hover:text-primary">关于我</a>
+                <a href="#projects" class="block py-2 text-primary hover:text-primary">核心项目</a>
+                <a href="#experience" class="block py-2 text-primary hover:text-primary">实习经历</a>
+                <a href="#skills" class="block py-2 text-primary hover:text-primary">校园经历</a>
+                <a href="#contact" class="block py-2 text-primary hover:text-primary">联系我</a>
+                <a href="#" class="block py-2 bg-accent text-white text-center rounded-lg font-medium">下载我的简历</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 简历内容容器（用于PDF导出） -->
+    <div id="resume-content">
+        <!-- 英雄区 -->
+        <section id="home" class="min-h-screen flex items-center pt-20 bg-gradient-hero relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#2C3E50" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                <!-- 左侧 -->
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-primary leading-snug tracking-wide">
+                            你好，我是
+                        </h1>
+                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-accent leading-tight">
+                            陶诗曼
+                        </h1>
+                    </div>
+                    <p class="text-xl md:text-2xl font-semibold text-charcoal leading-relaxed">
+                        武汉大学财务管理本科
+                    </p>
+                    <p class="text-lg text-secondary leading-relaxed">
+                        GPA <span class="text-accent font-semibold">3.97</span>/4.0 · 专业排名第一
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium border border-primary/10">数据分析</span>
+                        <span class="px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium border border-primary/10">AI产品研究</span>
+                        <span class="px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium border border-primary/10">商业洞察</span>
+                        <span class="px-4 py-2 bg-primary/5 text-primary rounded-full text-sm font-medium border border-primary/10">项目落地</span>
+                        <span class="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-medium">国家级竞赛一等奖</span>
+                    </div>
+                    <p class="text-secondary text-lg leading-relaxed max-w-lg">
+                        擅长用数据驱动决策，精通 SQL、Python 等数据分析工具，曾独立完成 AI 机器人开发、电商用户行为分析、竞品研究等多个项目，获全国大学生数学竞赛二等奖。
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="#projects" class="px-8 py-3.5 bg-primary text-white rounded-xl hover:bg-primary/90 transition-all duration-300 font-medium shadow-md hover:shadow-lg">
+                            查看我的项目
+                        </a>
+                        <a href="#contact" class="px-8 py-3.5 border-2 border-primary text-primary rounded-xl hover:bg-primary hover:text-white transition-all duration-300 font-medium">
+                            联系我
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 右侧 -->
+                <div class="flex justify-center">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-accent/20 rounded-full blur-2xl scale-110 group-hover:scale-125 transition-transform duration-500"></div>
+                        <img
+                            src="C:\Users\tsmti\Pictures\Saved Pictures\微信图片_20250311110106.jpg"
+                            alt="陶诗曼"
+                            class="relative w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-white shadow-xl group-hover:shadow-2xl transition-shadow duration-300"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section id="about" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-12">关于我</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 教育背景 -->
+                <div class="bg-soft-gray rounded-xl p-6 shadow-card hover:shadow-card-hover transition-shadow">
+                    <h3 class="text-lg font-semibold text-primary mb-4 flex items-center">
+                        <i class="fas fa-graduation-cap mr-2 text-primary"></i>教育背景
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-medium text-primary">武汉大学 | 财务管理本科</p>
+                            <p class="text-sm text-secondary">2024.09 - 2028.06</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">核心成绩：</p>
+                            <p class="font-semibold text-primary">GPA <span class="text-orange">3.97</span>/4.0，专业排名第一</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">核心课程：</p>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">高等数学 (100)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">概率论与数理统计 (100)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">统计学 (95)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">Python (100)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">SQL (96)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">运营与供应链管理 (96)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">荣誉奖项：</p>
+                            <div class="flex flex-wrap gap-2 mt-1">
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">国家奖学金</span>
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">全国大学生数学竞赛二等奖</span>
+                                <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">武汉大学三好学生</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 技能特长 -->
+                <div class="bg-soft-gray rounded-xl p-6 shadow-card hover:shadow-card-hover transition-shadow">
+                    <h3 class="text-lg font-semibold text-primary mb-4 flex items-center">
+                        <i class="fas fa-chart-line mr-2 text-primary"></i>技能特长
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm text-secondary mb-2">数据分析</p>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span>SQL</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full w-[90%] bg-primary rounded-full"></div>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Python (Pandas/Matplotlib)</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full w-[90%] bg-primary rounded-full"></div>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Excel</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full w-[95%] bg-primary rounded-full"></div>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>R</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="h-2 bg-white rounded-full overflow-hidden">
+                                    <div class="h-full w-[90%] bg-primary rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary mb-2">工具能力</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">Claude Code</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">VS Code</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">ChatGPT</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">GitHub</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary mb-2">语言能力</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">CET-6 (584分)</span>
+                                <span class="px-2 py-1 bg-white rounded text-xs text-secondary">CET-4 (639分)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary mb-2">软技能</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-accent/10 text-orange rounded text-xs">学习能力强</span>
+                                <span class="px-2 py-1 bg-accent/10 text-orange rounded text-xs">逻辑清晰</span>
+                                <span class="px-2 py-1 bg-accent/10 text-orange rounded text-xs">跨部门协作</span>
+                                <span class="px-2 py-1 bg-accent/10 text-orange rounded text-xs">抗压能力强</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心项目经历 -->
+    <section id="projects" class="py-16 md:py-24 bg-soft-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-8">核心项目经历</h2>
+            
+            <!-- 标签筛选栏 -->
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <button class="project-tab active px-4 py-2 bg-primary text-white rounded-full text-sm font-medium" data-category="all">全部</button>
+                <button class="project-tab px-4 py-2 bg-white text-primary rounded-full text-sm font-medium hover:bg-primary/10" data-category="product">产品</button>
+                <button class="project-tab px-4 py-2 bg-white text-primary rounded-full text-sm font-medium hover:bg-primary/10" data-category="ecommerce">电商</button>
+                <button class="project-tab px-4 py-2 bg-white text-primary rounded-full text-sm font-medium hover:bg-primary/10" data-category="business">商业分析</button>
+                <button class="project-tab px-4 py-2 bg-white text-primary rounded-full text-sm font-medium hover:bg-primary/10" data-category="ai">AI</button>
+            </div>
+            
+            <!-- 项目卡片 -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 项目1 -->
+                <div class="project-card bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300" data-category="ai product">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-primary">基于 DeepSeek 的多角色答疑机器人</h3>
+                        <span class="text-xs text-secondary">项目组长</span>
+                    </div>
+                    <p class="text-sm text-secondary mb-3">2025.09 - 至今</p>
+                    
+                    <!-- 作品截图区域 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-primary">作品截图</span>
+                            <label class="upload-btn px-3 py-1 bg-primary/10 text-primary rounded text-xs cursor-pointer hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-plus mr-1"></i>上传图片
+                                <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden project-image-upload" data-project="project1" multiple>
+                            </label>
+                        </div>
+                        <div class="project-images-container" id="project1-images">
+                            <!-- 已有图片展示 -->
+                            <div class="image-item relative">
+                                <img src="images/deepseek-1.png" alt="AI问答机器人截图" class="w-full h-40 object-cover rounded-lg">
+                                <button class="delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="upload-progress hidden mt-2">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="upload-progress-bar h-full bg-primary rounded-full transition-all"></div>
+                                </div>
+                                <span class="text-xs text-secondary">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">项目背景：</strong>为满足多场景角色切换需求，开发面向校内师生的 AI 问答机器人</p>
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">我的工作：</strong>基于 VS Code 完成主逻辑开发，调用 DeepSeek API 实现角色语气与知识边界差异化；用 Claude Code 辅助前端交互优化；解决 20+ 用户测试反馈的"换行即发送"问题；新增对话历史记忆、Markdown 导出功能</p>
+                    <p class="text-sm mb-4"><strong class="text-orange">核心成果：</strong>用户连续对话时长提升约 30%；完成原型并在校内小范围测试，交互流畅度获用户一致好评；支持长文本输入与对话留存</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">DeepSeek API</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">Claude Code</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">前端开发</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">用户体验优化</span>
+                    </div>
+                </div>
+                
+                <!-- 项目2 -->
+                <div class="project-card bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300" data-category="ecommerce">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-primary">潮汕手钩花跨境电商出海方案</h3>
+                        <span class="text-xs text-orange font-medium">获国家一等奖</span>
+                    </div>
+                    <p class="text-sm text-secondary mb-3">2025.03 - 2025.06</p>
+                    
+                    <!-- 作品截图区域 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-primary">作品截图</span>
+                            <label class="upload-btn px-3 py-1 bg-primary/10 text-primary rounded text-xs cursor-pointer hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-plus mr-1"></i>上传图片
+                                <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden project-image-upload" data-project="project2" multiple>
+                            </label>
+                        </div>
+                        <div class="project-images-container" id="project2-images">
+                            <div class="image-item relative">
+                                <img src="images/ecommerce-1.png" alt="跨境电商方案截图1" class="w-full h-40 object-cover rounded-lg">
+                                <button class="delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="image-item relative">
+                                <img src="images/ecommerce-2.png" alt="跨境电商方案截图2" class="w-full h-40 object-cover rounded-lg">
+                                <button class="delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="upload-progress hidden mt-2">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="upload-progress-bar h-full bg-primary rounded-full transition-all"></div>
+                                </div>
+                                <span class="text-xs text-secondary">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">我的工作：</strong>爬取 Etsy/Amazon 平台 <span class="text-orange font-semibold">200+</span> 热销品评论数据，提取高频词归纳出 3 类核心目标用户；对比竞品 Listing 与搜索词热度，识别出"国风手作""极简实用""节日主题"3 个未被充分覆盖的细分赛道</p>
+                    <p class="text-sm mb-4"><strong class="text-orange">核心成果：</strong>选品方案获评委"差异化定位清晰"评价；模拟测试中点点击率高于竞品均值 25%；作品分层设计成为评委核心亮点；最终获国家级一等奖</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">电商选品</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">用户洞察</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">竞品分析</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">数据可视化</span>
+                    </div>
+                </div>
+                
+                <!-- 项目3 -->
+                <div class="project-card bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300" data-category="business ecommerce">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-primary">电商平台用户行为与销售表现分析</h3>
+                        <span class="text-xs text-secondary">独立完成</span>
+                    </div>
+                    <p class="text-sm text-secondary mb-3">2025.07 - 2025.08</p>
+                    
+                    <!-- 作品截图区域 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-primary">作品截图</span>
+                            <label class="upload-btn px-3 py-1 bg-primary/10 text-primary rounded text-xs cursor-pointer hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-plus mr-1"></i>上传图片
+                                <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden project-image-upload" data-project="project3" multiple>
+                            </label>
+                        </div>
+                        <div class="project-images-container" id="project3-images">
+                            <div class="image-item relative">
+                                <img src="images/ecommerce-analysis.png" alt="电商用户行为分析截图" class="w-full h-40 object-cover rounded-lg">
+                                <button class="delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="upload-progress hidden mt-2">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="upload-progress-bar h-full bg-primary rounded-full transition-all"></div>
+                                </div>
+                                <span class="text-xs text-secondary">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">项目背景：</strong>基于某电商平台 <span class="text-orange font-semibold">17万+</span> 真实订单数据，分析用户消费行为与销售规律，为运营策略提供数据支持</p>
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">我的工作：</strong>对比高/低价格带商品支付转化率差异；分析各品类转化率区间与用户偏好；按月份聚合交易量，诊断销售淡旺季并提出针对性促销方案</p>
+                    <p class="text-sm mb-4"><strong class="text-orange">核心成果：</strong>发现高价格带商品转化率(87.1%)显著高于低价格带(85.7%)；提出的2月春节返场、4-5月双节点促销策略，预计可平滑季度销售波动15%</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">用户行为分析</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">销售预测</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">Excel</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">数据透视表</span>
+                    </div>
+                </div>
+                
+                <!-- 项目4 -->
+                <div class="project-card bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300" data-category="business">
+                    <div class="flex items-start justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-primary">中国企业家精神量化评估研究</h3>
+                        <span class="text-xs text-primary font-medium">省级项目负责人</span>
+                    </div>
+                    <p class="text-sm text-secondary mb-3">2025.04 - 2025.10</p>
+                    
+                    <!-- 作品截图区域 -->
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-primary">作品截图</span>
+                            <label class="upload-btn px-3 py-1 bg-primary/10 text-primary rounded text-xs cursor-pointer hover:bg-primary/20 transition-colors">
+                                <i class="fas fa-plus mr-1"></i>上传图片
+                                <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden project-image-upload" data-project="project4" multiple>
+                            </label>
+                        </div>
+                        <div class="project-images-container" id="project4-images">
+                            <div class="image-item relative">
+                                <img src="images/entrepreneur-data.png" alt="企业家精神研究截图" class="w-full h-40 object-cover rounded-lg">
+                                <button class="delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="upload-progress hidden mt-2">
+                            <div class="flex items-center gap-2">
+                                <div class="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                    <div class="upload-progress-bar h-full bg-primary rounded-full transition-all"></div>
+                                </div>
+                                <span class="text-xs text-secondary">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">项目背景：</strong>针对2023年 <span class="text-orange font-semibold">1588家</span> 上市公司财报，量化分析企业家精神与企业经营绩效的关系</p>
+                    <p class="text-sm text-secondary mb-3"><strong class="text-primary">我的工作：</strong>从WIND、CSMAR数据库抓取员工及营收等关键财务数据；对比不同省份、不同行业的四维度指标差异并进行归因分析</p>
+                    <p class="text-sm mb-4"><strong class="text-orange">核心成果：</strong>撰写1.5万字结题报告，获湖北省大学生创新创业训练计划省级立项</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">商业分析</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">数据抓取</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">报告撰写</span>
+                        <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">数据库使用</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 实习经历 -->
+    <section id="experience" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-8">实习经历</h2>
+            <div class="bg-soft-gray rounded-xl p-6 md:p-8 shadow-card">
+                <div class="flex flex-wrap items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-primary">投资助理（人工智能组）</h3>
+                        <div class="flex flex-wrap items-center gap-3 mt-1">
+                            <span class="text-secondary">深圳市海坤投资管理有限公司</span>
+                            <span class="text-secondary">|</span>
+                            <span class="text-secondary">2025.06 - 2025.09</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <p class="text-sm font-medium text-primary mb-1">核心工作 1：产品与市场定位分析</p>
+                        <p class="text-sm text-secondary">深入研究 MiniMax、Glow、Talkie 等多模态大模型，拆解"情感陪伴切入C端再向B端开放"的商业模式，对比国内外同类产品的差异化打法与用户留存逻辑</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-primary mb-1">核心工作 2：行业信息监控</p>
+                        <p class="text-sm text-secondary">建立标准化信息筛选机制，每周从官方公告、媒体、研报抓取 AI 行业动态及竞品情报，去重提炼关键信息</p>
+                    </div>
+                </div>
+                
+                <p class="text-sm mb-4"><strong class="text-orange">核心成果：</strong>独立完成《多模态大模型竞品分析报告》，获部门负责人高度认可，已发布在公司公众号，累计阅读量 <span class="counter" data-target="2000">2000</span>+</p>
+                
+                <!-- 实习截图展示 -->
+                <div class="mb-6">
+                    <p class="text-sm font-medium text-primary mb-3">实习成果截图</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                            <img 
+                                src="C:\Users\tsmti\Pictures\Screenshots\屏幕截图 2026-06-11 151117.png" 
+                                alt="AI竞品分析报告截图1" 
+                                class="w-full h-auto object-contain"
+                                onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23f0f0f0%22 width=%22400%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22sans-serif%22>图片加载失败</text></svg>';"
+                            />
+                            <p class="text-xs text-secondary text-center py-2 bg-soft-gray">多模态大模型竞品分析报告</p>
+                        </div>
+                        <div class="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                            <img 
+                                src="C:\Users\tsmti\Pictures\Screenshots\屏幕截图 2026-06-11 151050.png" 
+                                alt="AI竞品分析报告截图2" 
+                                class="w-full h-auto object-contain"
+                                onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23f0f0f0%22 width=%22400%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23999%22 font-family=%22sans-serif%22>图片加载失败</text></svg>';"
+                            />
+                            <p class="text-xs text-secondary text-center py-2 bg-soft-gray">行业信息监控与分析</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">AI行业研究</span>
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">竞品分析</span>
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">市场调研</span>
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">报告撰写</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 校园经历 -->
+    <section id="skills" class="py-16 md:py-24 bg-soft-gray">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-8">校园经历</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 校园经历1 -->
+                <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover transition-shadow">
+                    <h3 class="text-lg font-semibold text-primary mb-2">武汉大学经济与管理学院团委组织部</h3>
+                    <p class="text-sm text-secondary mb-4">部委 | 2024.09 - 至今</p>
+                    <p class="text-sm text-secondary">
+                        <strong class="text-orange">核心成果：</strong>独立策划"徒步珞珈"活动，设计打卡+互动+奖励全流程，吸引 <span class="counter" data-target="500">500</span>+ 人报名；统筹7人执行团队，完成5轮跨部门沟通，活动参与人数超出预期75%
+                    </p>
+                </div>
+                
+                <!-- 校园经历2 -->
+                <div class="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover transition-shadow">
+                    <h3 class="text-lg font-semibold text-primary mb-2">康腾实践中心（全国百强社团）</h3>
+                    <p class="text-sm text-secondary mb-4">部委 | 2024.09 - 2025.09</p>
+                    <p class="text-sm text-secondary">
+                        <strong class="text-orange">核心成果：</strong>整合普华永道、华为等企业赞助2万元；策划"康腾商业案例分析大赛"品牌活动，吸引全国 <span class="counter" data-target="500">500</span>+ 人次参与；直接拉动社团经费收入2000元
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我 -->
+    <section id="contact" class="py-16 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-primary mb-8">联系我</h2>
+            <div class="bg-soft-gray rounded-xl p-6 md:p-8 max-w-xl mx-auto shadow-card">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-envelope text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">邮箱</p>
+                            <p class="text-primary">【m15002791826@163.com】</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-phone text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">电话</p>
+                            <p class="text-primary">【15002791826】</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-github text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">GitHub</p>
+                            <a href="https://github.com/tsm5114" target="_blank" class="text-primary hover:text-luojia-blue transition-colors">https://github.com/tsm5114</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-weixin text-primary"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-secondary">微信</p>
+                            <p class="text-primary">【tsmhadrttkx】</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 版权信息 -->
+            <p class="text-center text-secondary mt-8">© 2026 陶诗曼 | 武汉大学 财务管理</p>
+        </div>
+    </section>
+    </div> <!-- 简历内容容器结束 -->
+
+    <!-- 回到顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-primary/90">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-white', 'shadow-md');
+                navbar.classList.remove('bg-transparent');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md');
+                navbar.classList.add('bg-transparent');
+            }
+            
+            if (window.scrollY > 500) {
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+        
+        // 汉堡菜单
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+        
+        // 关闭移动端菜单
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // 回到顶部
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // 项目筛选
+        const tabs = document.querySelectorAll('.project-tab');
+        const cards = document.querySelectorAll('.project-card');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active', 'bg-primary', 'text-white'));
+                tabs.forEach(t => t.classList.add('bg-white', 'text-primary'));
+                tab.classList.add('active', 'bg-primary', 'text-white');
+                tab.classList.remove('bg-white', 'text-primary');
+                
+                const category = tab.getAttribute('data-category');
+                
+                cards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category').includes(category)) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // 数字动画
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            
+            counters.forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-target'));
+                const decimals = parseInt(counter.getAttribute('data-decimals')) || 0;
+                const duration = 2000;
+                const startTime = performance.now();
+                
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = target * easeOutQuart;
+                    
+                    counter.textContent = current.toFixed(decimals);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+                
+                requestAnimationFrame(update);
+            });
+        }
+        
+        // 图片上传功能
+        const imageUploads = document.querySelectorAll('.project-image-upload');
+        
+        imageUploads.forEach(upload => {
+            upload.addEventListener('change', function(e) {
+                const files = e.target.files;
+                const projectId = this.getAttribute('data-project');
+                const container = document.getElementById(`${projectId}-images`);
+                const progressBar = this.parentElement.parentElement.nextElementSibling;
+                
+                if (!files || files.length === 0) return;
+                
+                // 显示进度条
+                progressBar.classList.remove('hidden');
+                const progressBarInner = progressBar.querySelector('.upload-progress-bar');
+                const progressText = progressBar.querySelector('span');
+                
+                let uploadedCount = 0;
+                
+                Array.from(files).forEach((file, index) => {
+                    // 验证文件类型
+                    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('请上传JPG、PNG或WEBP格式的图片');
+                        return;
+                    }
+                    
+                    // 验证文件大小（最大5MB）
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('图片大小不能超过5MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        // 创建图片预览元素
+                        const imageItem = document.createElement('div');
+                        imageItem.className = 'image-item relative';
+                        
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.alt = `作品截图${index + 1}`;
+                        img.className = 'w-full h-40 object-cover rounded-lg';
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'delete-image-btn absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors';
+                        deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                        
+                        // 删除图片功能
+                        deleteBtn.addEventListener('click', function() {
+                            imageItem.remove();
+                        });
+                        
+                        // 点击预览功能
+                        img.addEventListener('click', function() {
+                            showImagePreview(event.target.src);
+                        });
+                        
+                        imageItem.appendChild(img);
+                        imageItem.appendChild(deleteBtn);
+                        container.appendChild(imageItem);
+                        
+                        // 更新进度
+                        uploadedCount++;
+                        const progress = Math.round((uploadedCount / files.length) * 100);
+                        progressBarInner.style.width = `${progress}%`;
+                        progressText.textContent = `${progress}%`;
+                        
+                        // 所有图片上传完成
+                        if (uploadedCount === files.length) {
+                            setTimeout(() => {
+                                progressBar.classList.add('hidden');
+                                progressBarInner.style.width = '0%';
+                                progressText.textContent = '0%';
+                            }, 500);
+                        }
+                    };
+                    
+                    reader.onerror = function() {
+                        alert('图片读取失败，请重试');
+                        uploadedCount++;
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+                
+                // 清空文件输入
+                this.value = '';
+            });
+        });
+        
+        // 删除已有图片
+        document.querySelectorAll('.delete-image-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.remove();
+            });
+        });
+        
+        // 图片预览功能
+        function showImagePreview(src) {
+            // 创建预览模态框
+            let modal = document.getElementById('image-preview-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'image-preview-modal';
+                modal.className = 'image-preview-modal';
+                modal.innerHTML = `
+                    <div class="image-preview-content">
+                        <button class="close-preview-btn" onclick="closeImagePreview()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <img src="${src}" alt="预览">
+                    </div>
+                `;
+                document.body.appendChild(modal);
+            } else {
+                modal.querySelector('img').src = src;
+            }
+            
+            modal.classList.add('show');
+            
+            // 点击背景关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeImagePreview();
+                }
+            });
+            
+            // ESC键关闭
+            document.addEventListener('keydown', handleEscClose);
+        }
+        
+        function closeImagePreview() {
+            const modal = document.getElementById('image-preview-modal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+            document.removeEventListener('keydown', handleEscClose);
+        }
+        
+        function handleEscClose(e) {
+            if (e.key === 'Escape') {
+                closeImagePreview();
+            }
+        }
+        
+        // 点击已有图片预览
+        document.querySelectorAll('.project-images-container img').forEach(img => {
+            img.addEventListener('click', function() {
+                showImagePreview(this.src);
+            });
+        });
+        
+        // 滚动触发动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // 触发数字动画
+                    if (entry.target.querySelector('.counter')) {
+                        animateCounters();
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
